@@ -17,11 +17,17 @@ player_y = HEIGHT - 2 * player_size
 player_speed = 5
 jumping = False
 jump_count = 10
+gravity = 5
 
 # Platform variables
 platform_width = 200
 platform_height = 20
 platform_x = WIDTH // 2 - platform_width // 2
+platform_y = HEIGHT - 50
+# Platform variables
+platform_width = 200
+platform_height = 20
+platform_x = WIDTH // 6 - platform_width // 6
 platform_y = HEIGHT - 50
 
 # Initialize screen
@@ -59,10 +65,17 @@ while True:
     player_x = max(0, min(WIDTH - player_size, player_x))
 
     # Check for collision with the platform
-    if player_y + player_size > platform_y and player_x < platform_x + platform_width and player_x + player_size > platform_x:
-        player_y = platform_y - player_size
-        jumping = False
-        jump_count = 10
+    if player_y + player_size >= platform_y and player_y <= platform_y + platform_height and \
+            player_x + player_size >= platform_x and player_x <= platform_x + platform_width:
+        if jumping and player_y + player_size < platform_y + 5:
+            # Player is jumping and is above the platform, allow jumping on the platform
+            player_y = platform_y - player_size
+            jumping = False
+            jump_count = 10
+        elif not jumping:
+            # Player is on the platform
+            player_y = platform_y - player_size
+            jump_count = 10
 
     # Check for collision with the ground
     if player_y > HEIGHT:
@@ -72,7 +85,7 @@ while True:
 
     # Gravity
     if player_y < HEIGHT - player_size and not jumping:
-        player_y += 5
+        player_y += gravity
 
     # Draw everything
     screen.fill(WHITE)

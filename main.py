@@ -5,7 +5,7 @@ import sys
 pygame.init()
 
 # Constants
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 1080, 720
 FPS = 60
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
@@ -46,7 +46,7 @@ while True:
     
     # Jumping
     if not jumping:
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_w]:
             jumping = True
     else:
         if jump_count >= -10:
@@ -59,7 +59,7 @@ while True:
             jumping = False
             jump_count = 10
 
-    player_x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * player_speed
+    player_x += (keys[pygame.K_d] - keys[pygame.K_a]) * player_speed
 
     # Keep the player within the screen boundaries
     player_x = max(0, min(WIDTH - player_size, player_x))
@@ -75,6 +75,17 @@ while True:
         elif not jumping:
             # Player is on the platform
             player_y = platform_y - player_size
+            jump_count = 10
+    if player_y + player_size >= platform2_y and player_y <= platform2_y + platform2_height and \
+            player_x + player_size >= platform2_x and player_x <= platform2_x + platform2_width:
+        if jumping and player_y + player_size < platform2_y + 5:
+            # Player is jumping and is above the platform, allow jumping on the platform
+            player_y = platform2_y - player_size
+            jumping = False
+            jump_count = 10
+        elif not jumping:
+            # Player is on the platform
+            player_y = platform2_y - player_size
             jump_count = 10
 
     # Check for collision with the ground

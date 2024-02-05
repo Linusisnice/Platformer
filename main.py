@@ -25,10 +25,10 @@ platform_height = 20
 platform_x = WIDTH // 2 - platform_width // 2
 platform_y = HEIGHT - 50
 # Platform variables
-platform_width = 200
-platform_height = 20
-platform_x = WIDTH // 6 - platform_width // 6
-platform_y = HEIGHT - 50
+platform2_width = 200
+platform2_height = 20
+platform2_x = WIDTH // 6 - platform2_width // 6
+platform2_y = HEIGHT - 50
 
 # Initialize screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -91,6 +91,6 @@ while True:
     screen.fill(WHITE)
     pygame.draw.rect(screen, BLUE, (player_x, player_y, player_size, player_size))
     pygame.draw.rect(screen, BLUE, (platform_x, platform_y, platform_width, platform_height))
-
+    pygame.draw.rect(screen, BLUE, (platform2_x, platform2_y, platform2_width, platform2_height))
     pygame.display.flip()
     clock.tick(FPS)

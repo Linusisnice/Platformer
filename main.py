@@ -15,6 +15,8 @@ player_size = 50
 player_x = WIDTH // 2 - player_size // 2
 player_y = HEIGHT - 2 * player_size
 player_speed = 5
+jumping = False
+jump_count = 10
 
 # Platform variables
 platform_width = 200
@@ -35,6 +37,22 @@ while True:
             sys.exit()
 
     keys = pygame.key.get_pressed()
+    
+    # Jumping
+    if not jumping:
+        if keys[pygame.K_SPACE]:
+            jumping = True
+    else:
+        if jump_count >= -10:
+            neg = 1
+            if jump_count < 0:
+                neg = -1
+            player_y -= (jump_count ** 2) * 0.5 * neg
+            jump_count -= 1
+        else:
+            jumping = False
+            jump_count = 10
+
     player_x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * player_speed
 
     # Keep the player within the screen boundaries
@@ -43,9 +61,17 @@ while True:
     # Check for collision with the platform
     if player_y + player_size > platform_y and player_x < platform_x + platform_width and player_x + player_size > platform_x:
         player_y = platform_y - player_size
+        jumping = False
+        jump_count = 10
+
+    # Check for collision with the ground
+    if player_y > HEIGHT:
+        # Player touches the ground, reset the position
+        player_x = WIDTH // 2 - player_size // 2
+        player_y = HEIGHT - 2 * player_size
 
     # Gravity
-    if player_y < HEIGHT - player_size:
+    if player_y < HEIGHT - player_size and not jumping:
         player_y += 5
 
     # Draw everything
